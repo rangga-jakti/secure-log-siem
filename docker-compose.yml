@@ -1,0 +1,31 @@
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: siem
+      POSTGRES_PASSWORD: siem_password
+      POSTGRES_DB: siem
+    volumes:
+      - siem_pg_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U siem"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build: .
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql+psycopg2://siem:siem_password@db:5432/siem
+      SECRET_KEY: ${SECRET_KEY:-dev-secret-change-me}
+      INGEST_API_KEY: ${INGEST_API_KEY:-dev-ingest-key-change-me}
+    ports:
+      - "8000:8000"
+
+volumes:
+  siem_pg_data:
