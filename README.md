@@ -6,6 +6,14 @@ in batch by an IsolationForest anomaly model. Built to be small enough to
 read end-to-end in one sitting, but structured the way a real detection
 pipeline is structured.
 
+## Demo
+
+Simulated attack traffic (brute-force login, port scan, suspicious process) gets
+caught by the rule engine in real time, and independently confirmed by a
+separate batch IsolationForest anomaly scan:
+
+![Anomaly scan result](docs/anomaly-scan-demo.png)
+
 ## Why this exists
 
 Most backend portfolio projects are CRUD apps with auth bolted on. This one
