@@ -156,3 +156,11 @@ scripts/
 tests/
   test_ingest.py          End-to-end auth + ingest + alert tests
 ```
+## Real-world integration
+This backend also ingests live events from [windows-security-monitor](https://github.com/rangga-jakti/windows-security-monitor),
+a Windows security monitoring tool with 8 parallel detectors (process, service,
+file, network, registry, USB, startup, login). A small reporter module
+(`siem_reporter.py`) forwards every alert it raises to this API's `/ingest`
+endpoint alongside its existing console/dashboard/Telegram/email outputs --
+so this isn't just tested against simulated traffic, it receives real
+detections from a tool actively monitoring a live machine.
