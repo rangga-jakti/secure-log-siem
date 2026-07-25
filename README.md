@@ -1,3 +1,5 @@
+![Tests](https://github.com/rangga-jakti/secure-log-siem/actions/workflows/tests.yml/badge.svg)
+
 # Secure Log SIEM
 
 A minimal SIEM-style backend: security/log events come in through a REST
