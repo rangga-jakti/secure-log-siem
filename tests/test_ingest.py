@@ -6,8 +6,16 @@ os.environ["DATABASE_URL"] = "sqlite:///./test_siem.db"
 import pytest
 from fastapi.testclient import TestClient
 
+from app.database import Base, engine
 from app.main import app
 from app.config import settings
+from app import models  # noqa: F401  (registers models on Base.metadata)
+
+# Tests create the schema directly from models rather than running Alembic
+# migrations — that keeps the suite fast and focused on app behavior.
+# Migrations themselves are simple enough to be verified by running
+# `alembic upgrade head` locally/in CI as a separate, explicit step.
+Base.metadata.create_all(bind=engine)
 
 client = TestClient(app)
 
@@ -17,6 +25,10 @@ ADMIN_USER = {"username": "admin_test", "password": "supersecret123"}
 @pytest.fixture(scope="module", autouse=True)
 def cleanup():
     yield
+    # Windows keeps a file handle open on the sqlite connection until the
+    # engine's pool is explicitly disposed, which blocks deleting the file
+    # here (this is a no-op-safe call on other platforms too).
+    engine.dispose()
     if os.path.exists("./test_siem.db"):
         os.remove("./test_siem.db")
 

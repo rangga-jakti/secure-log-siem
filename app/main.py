@@ -1,12 +1,10 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.database import Base, engine
 from app.routers import auth_router, ingest, events, alerts
 
-# For an MVP, create_all on startup is fine. A real deployment would use
-# Alembic migrations instead so schema changes are versioned and reversible.
-Base.metadata.create_all(bind=engine)
+# Schema is managed by Alembic migrations (see alembic/), not create_all().
+# Run `alembic upgrade head` before starting the app for the first time.
 
 app = FastAPI(
     title="Secure Log SIEM",
