@@ -16,6 +16,11 @@ separate batch IsolationForest anomaly scan:
 
 ![Anomaly scan result](docs/anomaly-scan-demo.png)
 
+## Dashboard
+
+A companion Next.js console for browsing events/alerts visually instead of
+through Swagger — see [siem-dashboard](https://github.com/rangga-jakti/siem-dashboard).
+
 ## Why this exists
 
 Most backend portfolio projects are CRUD apps with auth bolted on. This one
